@@ -318,7 +318,7 @@ function fbird_connect(
     int $dialect = 3,
     ?string $role = null,
     int $flags = 0
-): mixed {}
+): Firebird\Connection|false {}
 
 /**
  * Open a persistent connection to a Firebird database.
@@ -330,7 +330,7 @@ function fbird_connect(
  * @param int         $buffers  Number of database cache buffers
  * @param int         $dialect  SQL dialect (1, 2, or 3)
  * @param string|null $role     SQL role name
- * @return resource|false Connection resource on success, false on failure
+ * @return Firebird\Connection|false Connection object on success, false on failure
  * @since 7.0.0
  */
 function fbird_pconnect(
@@ -341,12 +341,12 @@ function fbird_pconnect(
     int $buffers = 0,
     int $dialect = 3,
     ?string $role = null
-): mixed {}
+): Firebird\Connection|false {}
 
 /**
  * Close a Firebird database connection.
  *
- * @param resource|null $connection Connection resource
+ * @param Firebird\Connection|null $connection Connection object
  * @return bool True on success, false on failure
  * @since 7.0.0
  */
@@ -374,7 +374,7 @@ function fbird_drop_db(mixed $connection = null, ?string $username = null, ?stri
  * @param string|null $password  Password
  * @param string|null $charset   Character set (default: UTF8)
  * @param int|null    $page_size Page size in bytes (default: 8192)
- * @return resource|false Connection resource on success, false on failure
+ * @return Firebird\Connection|false Connection object on success, false on failure
  * @since 9.0.0
  */
 function fbird_create_database(
@@ -383,7 +383,7 @@ function fbird_create_database(
     ?string $password = null,
     ?string $charset = null,
     ?int $page_size = null
-): mixed {}
+): Firebird\Connection|false {}
 
 /**
  * Get the last insert ID using a named generator/sequence.
@@ -407,10 +407,10 @@ function fbird_last_insert_id(mixed $link_identifier, string $sequence): int|fal
  *
  * @param resource|string $link_or_query Connection/transaction or query string
  * @param mixed           ...$args       Additional arguments
- * @return resource|bool Result resource or bool for DML
+ * @return \Firebird\ResultSet|int|bool ResultSet object for SELECT, affected-row count for DML, false on error
  * @since 7.0.0
  */
-function fbird_query(mixed $link_or_query, mixed ...$args): mixed {}
+function fbird_query(mixed $link_or_query, mixed ...$args): \Firebird\ResultSet|int|bool {}
 
 /**
  * Prepare a SQL statement for later execution.
@@ -449,12 +449,12 @@ function fbird_prepare_ex(
 /**
  * Execute a prepared statement.
  *
- * @param resource $query     Prepared statement resource
+ * @param resource|\Firebird\ResultSet $query Prepared statement resource or ResultSet object
  * @param mixed    ...$bind_args Bind parameters
- * @return resource|bool Result resource or bool
+ * @return \Firebird\ResultSet|int|bool ResultSet object for SELECT, affected-row count for DML, false on error
  * @since 7.0.0
  */
-function fbird_execute(mixed $query, mixed ...$bind_args): mixed {}
+function fbird_execute(mixed $query, mixed ...$bind_args): \Firebird\ResultSet|int|bool {}
 
 /**
  * Execute a DML/DDL statement with parameters within an explicit transaction.
@@ -639,7 +639,7 @@ function fbird_param_info(mixed $query, int $param_number): array|false {}
  * @return resource|false Transaction resource
  * @since 7.0.0
  */
-function fbird_trans(mixed $link_or_flags = null, mixed ...$args): mixed {}
+function fbird_trans(mixed $link_or_flags = null, mixed ...$args): \Firebird\Transaction|false {}
 
 /**
  * Start a transaction with options.
@@ -649,7 +649,7 @@ function fbird_trans(mixed $link_or_flags = null, mixed ...$args): mixed {}
  * @return resource|false Transaction resource
  * @since 7.0.0
  */
-function fbird_trans_start(mixed $link, mixed $options = 0): mixed {}
+function fbird_trans_start(mixed $link, mixed $options = 0): \Firebird\Transaction|false {}
 
 /**
  * Commit a transaction.
@@ -733,11 +733,11 @@ function fbird_trans_info(mixed $trans_handle): array|false {}
 /**
  * Create a blob for adding data.
  *
- * @param resource|null $link Database connection
- * @return resource|false Blob handle or false
+ * @param resource|\Firebird\Connection|null $link Database connection
+ * @return \Firebird\Blob|false Blob handle or false
  * @since 7.0.0
  */
-function fbird_blob_create(mixed $link = null): mixed {}
+function fbird_blob_create(mixed $link = null): \Firebird\Blob|false {}
 
 /**
  * Add data to a blob.
@@ -770,12 +770,12 @@ function fbird_blob_cancel(mixed $blob): bool {}
 /**
  * Open a blob for reading.
  *
- * @param resource|string $link_or_blob_id Connection or blob ID
- * @param string|null     $blob_id         Blob ID
- * @return resource|false Blob handle or false
+ * @param resource|\Firebird\Connection|string $link_or_blob_id Connection or blob ID
+ * @param string|null                          $blob_id         Blob ID
+ * @return \Firebird\Blob|false Blob handle or false
  * @since 7.0.0
  */
-function fbird_blob_open(mixed $link_or_blob_id, ?string $blob_id = null): mixed {}
+function fbird_blob_open(mixed $link_or_blob_id, ?string $blob_id = null): \Firebird\Blob|false {}
 
 /**
  * Get data from a blob.
@@ -839,21 +839,21 @@ function fbird_blob_open_stream(mixed $link_or_id, ?string $blob_id = null): mix
 /**
  * Create a seekable blob.
  *
- * @param resource|null $link Database connection
- * @return resource|false Blob handle or false
+ * @param resource|\Firebird\Connection|null $link Database connection
+ * @return \Firebird\Blob|false Blob handle or false
  * @since 7.0.0
  */
-function fbird_blob_create_seekable(mixed $link = null): mixed {}
+function fbird_blob_create_seekable(mixed $link = null): \Firebird\Blob|false {}
 
 /**
  * Open a blob as seekable.
  *
- * @param resource|string $link_or_id Connection or blob ID
- * @param string|null     $blob_id    Blob ID
- * @return resource|false Blob handle or false
+ * @param resource|\Firebird\Connection|string $link_or_id Connection or blob ID
+ * @param string|null                          $blob_id    Blob ID
+ * @return \Firebird\Blob|false Blob handle or false
  * @since 7.0.0
  */
-function fbird_blob_open_seekable(mixed $link_or_id, ?string $blob_id = null): mixed {}
+function fbird_blob_open_seekable(mixed $link_or_id, ?string $blob_id = null): \Firebird\Blob|false {}
 
 /**
  * Seek within a blob.
