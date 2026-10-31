@@ -394,9 +394,16 @@ function fbird_server_version(?object $connection = null): string|false {}
 /**
  * Drop a Firebird database.
  *
+ * When the first argument is a database path (string overload), BOTH
+ * $username and $password are REQUIRED as of v13.4.0: omitted credentials
+ * fail with "credentials are required for the string overload" instead of
+ * silently attaching as SYSDBA/masterkey (the hardcoded fallback was
+ * removed - php-firebird #731). The resource/object path
+ * (fbird_drop_db($connection)) is unchanged.
+ *
  * @param mixed $connection Connection resource or database path (v9.0.0+)
- * @param string|null          $username   Username (if path used)
- * @param string|null          $password   Password (if path used)
+ * @param string|null          $username   Username (required if path used, v13.4.0+)
+ * @param string|null          $password   Password (required if path used, v13.4.0+)
  * @return bool True on success, false on failure
  * @since 7.0.0
  */
