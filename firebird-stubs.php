@@ -10,7 +10,7 @@
  * This stub file does not contain any implementation.
  *
  * @package   php-firebird-stubs
- * @version   13.4.0
+ * @version   13.4.1
  * @author    satware AG <info@satware.com>
  * @copyright 2025-2026 satware AG
  * @license   PHP-3.01 https://www.php.net/license/3_01.txt
@@ -394,16 +394,9 @@ function fbird_server_version(?object $connection = null): string|false {}
 /**
  * Drop a Firebird database.
  *
- * When the first argument is a database path (string overload), BOTH
- * $username and $password are REQUIRED as of v13.4.0: omitted credentials
- * fail with "credentials are required for the string overload" instead of
- * silently attaching as SYSDBA/masterkey (the hardcoded fallback was
- * removed - php-firebird #731). The resource/object path
- * (fbird_drop_db($connection)) is unchanged.
- *
  * @param mixed $connection Connection resource or database path (v9.0.0+)
- * @param string|null          $username   Username (required if path used, v13.4.0+)
- * @param string|null          $password   Password (required if path used, v13.4.0+)
+ * @param string|null          $username   Username (if path used)
+ * @param string|null          $password   Password (if path used)
  * @return bool True on success, false on failure
  * @since 7.0.0
  */
